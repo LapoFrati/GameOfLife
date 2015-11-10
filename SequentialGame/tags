@@ -1,0 +1,29 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ALIVE	World.h	/^#define ALIVE /;"	d
+CC	Makefile	/^CC = g++$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -Wall -pedantic -std=c++0x$/;"	m
+EMPTY	World.h	/^#define EMPTY /;"	d
+ITERATIONS	Main.cpp	/^#define ITERATIONS	/;"	d	file:
+LDFLAGS	Makefile	/^LDFLAGS = -pthread$/;"	m
+WORLD_H	World.h	/^#define WORLD_H$/;"	d
+World	World.cpp	/^World::World(int width, int heigth): width(width), heigth(heigth){$/;"	f	class:World
+World	World.h	/^class World{$/;"	c
+count_neigh	World.cpp	/^int World::count_neigh(int row, int column){$/;"	f	class:World
+curr_world	World.h	/^        unsigned short ** curr_world, ** new_world;$/;"	m	class:World
+heigth	World.h	/^    	int width, heigth;$/;"	m	class:World
+main	Main.cpp	/^int main(int argc, char * argv[]) {$/;"	f
+main	test.cpp	/^int main(int argc, char * argv[]) {$/;"	f
+mod	World.cpp	/^inline int World::mod(int a, int b){$/;"	f	class:World
+mod	test.cpp	/^inline int mod(int a, int b){$/;"	f
+new_world	World.h	/^        unsigned short ** curr_world, ** new_world;$/;"	m	class:World
+print_world	World.cpp	/^void World::print_world(){$/;"	f	class:World
+randomize_world	World.cpp	/^void World::randomize_world(int seed, int density){$/;"	f	class:World
+set_cell	World.cpp	/^void World::set_cell(int row, int column, int state){$/;"	f	class:World
+update_world	World.cpp	/^void World::update_world(){$/;"	f	class:World
+width	World.h	/^    	int width, heigth;$/;"	m	class:World
+~World	World.cpp	/^World::~World(){$/;"	f	class:World
