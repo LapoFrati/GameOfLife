@@ -12,11 +12,11 @@
 
 class World{
 	private:
-		unsigned short ** curr_world, ** new_world;
-		int nw, availableConcurrentThreads, chunk;
+		
+		int nw, chunk, more;
 
     public:
-    	World(int w, int h);
+    	World(int w, int h, int workers);
     	~World();
     	void print_world();
     	void randomize_world(int seed, int density);

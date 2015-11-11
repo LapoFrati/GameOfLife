@@ -4,6 +4,7 @@ using namespace std;
 
 Barrier barrier;
 int width, heigth;
+unsigned short ** curr_world, ** new_world;
 
 inline int mod(int a, int b){
 	return ( (a %= b) < 0 ) ? a + b : a;
@@ -24,13 +25,17 @@ int count_neigh(unsigned short ** world, int row, int column){
 	return count;
 }
 
-void body(int start_row, int end_row, int columns, int iterations, unsigned short ** curr_world, unsigned short ** new_world){
+void body(int start_row, int end_row, int columns, int iterations){
 	int count;
+	
+	#ifdef DEBUG
+		cout << "Received from "<< start_row << " to " << end_row<< " load: "<< end_row - start_row << endl;
+	#endif
 
 	for (int k = 0; k < iterations; ++k)
 	{
-		for (int i = start_row; i <= end_row; ++i)
-		{	for (int j = 0; j <= columns; ++j)
+		for (int i = start_row; i < end_row; ++i)
+		{	for (int j = 0; j < columns; ++j)
 			{	count = count_neigh(curr_world,i,j);
 				switch(curr_world[i][j]){
 						case ALIVE:	if(count == 2 || count == 3)
@@ -53,15 +58,20 @@ void body(int start_row, int end_row, int columns, int iterations, unsigned shor
 }
 
 
-World::World(int w, int h){
+World::World(int w, int h, int workers){
 	width = w;
 	heigth = h;
 
-	availableConcurrentThreads = sysconf( _SC_NPROCESSORS_ONLN );
-	nw = (availableConcurrentThreads > heigth) ? heigth : availableConcurrentThreads; // limit nw by number of rows
-	chunk = heigth / nw;
+	nw = (workers > heigth) ? heigth : workers; // limit nw by number of rows
 
 	barrier.set_workers(nw); 
+	
+	chunk = heigth / nw;
+	more = heigth % nw;
+	
+	#ifdef DEBUG
+		cout << "chunk: " << chunk <<" more: " << more << endl;
+	#endif
 
 	curr_world = new unsigned short*[heigth];
 	new_world = new unsigned short*[heigth];
@@ -135,12 +145,12 @@ void World::randomize_world(int seed, int density){
 
 void World::update_world(int iterations){
 	std::vector<std::thread> tid;
+	int start = 0, stop = 0, excess = more;
 
 	for(int i=0; i<nw; i++) {
-		if( i == nw-1)
-			tid.push_back(std::thread(body, (chunk*i), (heigth-1), width, iterations, curr_world, new_world)); 
-		else
-			tid.push_back(std::thread(body, (chunk*i), (chunk*(i+1)-1), width, iterations, curr_world, new_world));
+		start = stop;
+        stop  = start + chunk + (excess-- > 0 ? 1 : 0);
+		tid.push_back(std::thread(body, start, stop, width, iterations)); 
   	}
 
 	for(int i=0; i<nw; i++) 

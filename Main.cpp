@@ -3,16 +3,18 @@
 #include <vector>
 #include "World.h"
 
-#define ITERATIONS	1
 using namespace std;
 
 int main(int argc, char * argv[]) {
 
-	// number of threads to be used
-	//int retval,i,nw = atoi(argv[1]);
-	//std::vector<std::thread> tid; 
-
-	World world(10,10);
+	if (argc != 4) {
+        std::cerr << "use: " << argv[0]  << " dim iterations nworkers\n";
+        return -1;
+    }
+    int dim 		= atoi(argv[1]);
+    int iterations  = atoi(argv[2]);
+    int workers 	= atoi(argv[3]);
+	World world(dim, dim, workers);
 	//world.randomize_world(42, 3);
 	/* GLIDER */
 	world.set_cell(1, 2, ALIVE);
@@ -23,8 +25,8 @@ int main(int argc, char * argv[]) {
 	/**/
 
 	world.print_world();
-	world.update_world(ITERATIONS);
+	world.update_world(iterations);
 	world.print_world();
-
+	
 	return(0); 
 }

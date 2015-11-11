@@ -15,9 +15,6 @@ GameOfLife: Main.cpp World.o Barrier.o
 clean:
 	-rm -f *.o GameOfLife test debug
 
-run: GameOfLife
-	./GameOfLife
-
 test: test.cpp
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
 	./test
