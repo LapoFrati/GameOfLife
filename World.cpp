@@ -27,10 +27,10 @@ int count_neigh(unsigned short ** world, int row, int column){
 
 void body(int start_row, int end_row, int columns, int iterations){
 	int count;
-	
-	#ifdef DEBUG
-		cout << "Received from "<< start_row << " to " << end_row<< " load: "<< end_row - start_row << endl;
-	#endif
+
+#ifdef DEBUG
+	cout << "Received from "<< start_row << " to " << end_row<< " load: "<< end_row - start_row << endl;
+#endif
 
 	for (int k = 0; k < iterations; ++k)
 	{
@@ -38,18 +38,18 @@ void body(int start_row, int end_row, int columns, int iterations){
 		{	for (int j = 0; j < columns; ++j)
 			{	count = count_neigh(curr_world,i,j);
 				switch(curr_world[i][j]){
-						case ALIVE:	if(count == 2 || count == 3)
-										new_world[i][j] = ALIVE;
-									else /* count < 2 || count > 3 */
-										new_world[i][j] = EMPTY;
-									break;
+					case ALIVE:	if(count == 2 || count == 3)
+								new_world[i][j] = ALIVE;
+							else /* count < 2 || count > 3 */
+								new_world[i][j] = EMPTY;
+							break;
 
-						case EMPTY: if (count == 3)
-										new_world[i][j] = ALIVE;
-									else
-										new_world[i][j] = EMPTY;
-									break;
-					}
+					case EMPTY: if (count == 3)
+												new_world[i][j] = ALIVE;
+											else
+												new_world[i][j] = EMPTY;
+											break;
+				}
 			}
 		}
 
@@ -64,19 +64,19 @@ World::World(int w, int h, int workers){
 
 	nw = (workers > heigth) ? heigth : workers; // limit nw by number of rows
 
-	barrier.set_workers(nw); 
-	
+	barrier.set_workers(nw);
+
 	chunk = heigth / nw;
 	more = heigth % nw;
-	
-	#ifdef DEBUG
-		cout << "chunk: " << chunk <<" more: " << more << endl;
-	#endif
+
+#ifdef DEBUG
+	cout << "chunk: " << chunk <<" more: " << more << endl;
+#endif
 
 	curr_world = new unsigned short*[heigth];
 	new_world = new unsigned short*[heigth];
 	for (int i = 0; i < heigth; ++i)
-	{	
+	{
 		curr_world[i] = new unsigned short [width];
 		new_world[i] = new unsigned short [width];
 	}
@@ -108,10 +108,10 @@ void World::print_world(){
 	{	cout << i<<"|";
 		for (int j = 0; j < width; ++j)
 		{	if( j == width-1)
-				if(curr_world[i][j] == ALIVE)
-					cout <<"O";
-				else
-					cout <<" ";
+			if(curr_world[i][j] == ALIVE)
+				cout <<"O";
+			else
+				cout <<" ";
 			else
 				if(curr_world[i][j] == ALIVE)
 					cout <<"O ";
@@ -121,15 +121,15 @@ void World::print_world(){
 		cout << "|" <<endl;
 	}
 
-	#ifdef DEBUG
-		cout<<"Debug: Count of Neighbours"<<endl;
-		for (int i = 0; i < heigth; ++i)
-		{	cout << i << "|";
-			for (int j = 0; j < width; ++j)
-				cout << count_neigh(curr_world,i,j) << " ";
-			cout << endl;
-		}
-	#endif
+#ifdef DEBUG
+	cout<<"Debug: Count of Neighbours"<<endl;
+	for (int i = 0; i < heigth; ++i)
+	{	cout << i << "|";
+		for (int j = 0; j < width; ++j)
+			cout << count_neigh(curr_world,i,j) << " ";
+		cout << endl;
+	}
+#endif
 }
 
 void World::randomize_world(int seed, int density){
@@ -140,7 +140,7 @@ void World::randomize_world(int seed, int density){
 			if( (rand()%density) == 0)
 				curr_world[i][j] = ALIVE;
 			else
-				curr_world[i][j] = EMPTY;		
+				curr_world[i][j] = EMPTY;
 }
 
 void World::update_world(int iterations){
@@ -149,11 +149,11 @@ void World::update_world(int iterations){
 
 	for(int i=0; i<nw; i++) {
 		start = stop;
-        stop  = start + chunk + (excess-- > 0 ? 1 : 0);
-		tid.push_back(std::thread(body, start, stop, width, iterations)); 
-  	}
+		stop  = start + chunk + (excess-- > 0 ? 1 : 0);
+		tid.push_back(std::thread(body, start, stop, width, iterations));
+	}
 
-	for(int i=0; i<nw; i++) 
+	for(int i=0; i<nw; i++)
 		tid[i].join();
 }
 
