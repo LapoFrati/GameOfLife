@@ -6,8 +6,8 @@ LDFLAGS = -pthread
 
 .DEFAULT: GameOfLife
 
-GameOfLife: Main.cpp World.o Barrier.o
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+GameOfLife: Main.cpp World.o
+	$(CC) $(CFLAGS) -o $@ $^
 
 %.o: %.cpp %.h
 	$(CC) $(CFLAGS) -c $<
@@ -15,8 +15,11 @@ GameOfLife: Main.cpp World.o Barrier.o
 clean:
 	-rm -f *.o GameOfLife test debug
 
+run: GameOfLife
+	./GameOfLife
+
 test: test.cpp
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
+	$(CC) $(CFLAGS) -o $@ $<
 	./test
 
 debug: CFLAGS += -DDEBUG -g
