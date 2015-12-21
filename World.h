@@ -11,18 +11,17 @@
 #define EMPTY 0
 
 class World{
-	private:
-		
-		int nw, chunk, more;
+    private:
+        
+        int nw, chunk, more;
 
     public:
-    	World(int w, int h, int workers);
-    	~World();
-    	void print_world();
-    	void randomize_world(int seed, int density);
-    	void update_world(int iterations);
-    	void set_cell(int row, int column, int state);
-        
+        World(int w, int h, int workers);
+        void print_world();
+        void randomize_world(int seed, int density);
+        void update_world(int iterations);
+        void set_cell(int row, int column, int state);
+
 };
 
 #endif // WORLD_H
