@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -pedantic -std=c++0x
+CFLAGS = -Wall -pedantic -std=c++11
 LDFLAGS = -pthread
 
 .PHONY: clean debug intel run
@@ -10,10 +10,10 @@ GameOfLife: Main.cpp World.o Barrier.o
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
 
 %.o: %.cpp %.h
-	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) $(LDFLAGS) -c $<
 
 clean:
-	-rm -f *.o GameOfLife test debug
+	-rm -f *.o *.optrpt GameOfLife test debug
 
 intel : CFLAGS += -O3 -ipo -xHost -vec-report
 intel : CC = icpc
