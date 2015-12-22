@@ -8,22 +8,22 @@ int width, height;
 unsigned short ** curr_world, ** new_world;
 
 void body(int start_row, int end_row, int columns, int iterations){
-
+    int count;
 #ifdef DEBUG
-    cout << start_row << " to " << end_row << endl;
+        cout << start_row << " to " << end_row << endl;
 #endif
 
     for (int k = 0; k < iterations; ++k)
     {
         for (int i = start_row; i < end_row; ++i)
         {
-          #define COUNT(i,j) ( curr_world[i-1][j-1] + curr_world[i-1][ j ] + curr_world[i-1][j+1] \
-                             + curr_world[ i ][j-1]                        + curr_world[ i ][j+1] \
-                             + curr_world[i+1][j-1] + curr_world[i+1][ j ] + curr_world[i+1][j+1] )
-           // #pragma vector always
+            // #pragma vector always
             for (int j = 1; j < columns+1; ++j)
             {
-                new_world[i][j] = (curr_world[i][j] == 0)*(COUNT(i,j)==3) + (curr_world[i][j] == 1)*((COUNT(i,j)>=2)&&(COUNT(i,j)<=3));
+                count = ( curr_world[i-1][j-1] + curr_world[i-1][ j ] + curr_world[i-1][j+1]
+                        + curr_world[ i ][j-1]                        + curr_world[ i ][j+1]
+                        + curr_world[i+1][j-1] + curr_world[i+1][ j ] + curr_world[i+1][j+1] );
+                new_world[i][j] = (curr_world[i][j] == 0)*(count==3) + (curr_world[i][j] == 1)*((count>=2)&&(count<=3));
 
                 // update padding
                 //
@@ -39,22 +39,22 @@ void body(int start_row, int end_row, int columns, int iterations){
                 // update first column and last column
                 //
             }
-                if( i == 1 ){
-                    new_world[height+1]            = new_world[1]; // computed first row, copy to the bottom
-                    new_world[height+1][0]         = new_world[1][columns]; // copy the corners to complete the torus
-                    new_world[height+1][columns+1] = new_world[1][1]; // copy the corners to complete the torus
-                }
-                if( i == height ){
-                    new_world[0]            = new_world[height]; // computed last row, copy to the top
-                    new_world[0][0]         = new_world[height][columns]; // copy the corners to complete the torus
-                    new_world[0][columns+1] = new_world[height][1]; // copy the corners to complete the torus
-                }
-                if ( i != 1 && i != height ){ // update first and last columns
-                    new_world[i][0]         = new_world[i][columns];
-                    new_world[i][columns+1] = new_world[i][1];
-                }
-
+            if( i == 1 ){
+                new_world[height+1]            = new_world[1]; // computed first row, copy to the bottom
+                new_world[height+1][0]         = new_world[1][columns]; // copy the corners to complete the torus
+                new_world[height+1][columns+1] = new_world[1][1]; // copy the corners to complete the torus
             }
+            if( i == height ){
+                new_world[0]            = new_world[height]; // computed last row, copy to the top
+                new_world[0][0]         = new_world[height][columns]; // copy the corners to complete the torus
+                new_world[0][columns+1] = new_world[height][1]; // copy the corners to complete the torus
+            }
+            if ( i != 1 && i != height ){ // update first and last columns
+                new_world[i][0]         = new_world[i][columns];
+                new_world[i][columns+1] = new_world[i][1];
+            }
+
+        }
 
         barrier.join_barrier();
     }
