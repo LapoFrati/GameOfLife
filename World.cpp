@@ -8,7 +8,7 @@ int width, height;
 unsigned short ** curr_world, ** new_world;
 
 void body(int start_row, int end_row, int columns, int iterations){
-    int count;
+    int count, state;
 #ifdef DEBUG
         cout << start_row << " to " << end_row << endl;
 #endif
@@ -23,7 +23,8 @@ void body(int start_row, int end_row, int columns, int iterations){
                 count = ( curr_world[i-1][j-1] + curr_world[i-1][ j ] + curr_world[i-1][j+1]
                         + curr_world[ i ][j-1]                        + curr_world[ i ][j+1]
                         + curr_world[i+1][j-1] + curr_world[i+1][ j ] + curr_world[i+1][j+1] );
-                new_world[i][j] = (curr_world[i][j] == 0)*(count==3) + (curr_world[i][j] == 1)*((count>=2)&&(count<=3));
+                state = curr_world[i][j];
+                new_world[i][j] = (state == 0)*(count==3) + (state == 1)*((count>=2)&&(count<=3));
 
                 // update padding
                 //
